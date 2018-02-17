@@ -14,9 +14,14 @@ I like binary exploitations. [Exploit-exercise](http://exploit-exercises.com/) h
 [Cryptopals](http://cryptopals.com/) is the best place to start learning real-world cryptography.
 
 Tools I use:
+
 Editor: Sublime Text, emacs
+
 Session: tmux
+
 Virtual Machine: Kali-linux on VirtualBox
+
 Programming language: Python and C 
+
 
 My CTF handle is ```an0ne```
