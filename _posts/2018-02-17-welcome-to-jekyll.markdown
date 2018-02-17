@@ -1,25 +1,22 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "Welcome to my blog!"
 date:   2018-02-17 17:28:38 +0530
-categories: jekyll update
+categories: setup
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+I've setup my new blog with hope to write about security regulary. I spend time doing CTFs on various platforms. I get to know most of the updates on security through twitter.
 
-Jekyll also offers powerful support for code snippets:
+I like binary exploitations. [Exploit-exercise](http://exploit-exercises.com/) has really good VMs for learning.
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+[CTFtime](http://ctftime.org/) is a great place to get updates on upcoming CTFs.
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+[Cryptopals](http://cryptopals.com/) is the best place to start learning real-world cryptography.
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+Tools I use:
+Editor: Sublime Text, emacs
+Session: tmux
+Virtual Machine: Kali-linux on VirtualBox
+Programming language: Python and C 
+
+My CTF handle is ```an0ne```
