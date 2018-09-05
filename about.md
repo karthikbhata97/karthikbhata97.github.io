@@ -4,7 +4,9 @@ title: About
 permalink: /about/
 ---
 
-I am a 3rd year undergrad from R V College of Engineering.
+I am a senior year undergrad from R V College of Engineering.
+
+#### [Resume](./resume.pdf)
 
 #### I am a computer security enthusiast. 
 
