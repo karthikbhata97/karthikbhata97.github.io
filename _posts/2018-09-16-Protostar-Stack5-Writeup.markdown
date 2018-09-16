@@ -27,7 +27,7 @@ We will use [this](http://shell-storm.org/shellcode/files/shellcode-811.php) she
 Note: It is an x86 binary.
 
 #### Exploit
-- Write 76 bytes of padding for filling stack space. (0x44 i.e 68 and 8 extra bytes due to memory alignment at `0x080483c7`)  
+- Write 76 bytes of padding for filling stack space. (0x44 i.e 64 and 12 extra bytes due to memory alignment at `0x080483c7`)  
 - 4 byte address to starting of shellcode.
 - Shellcode
 
