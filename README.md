@@ -1,6 +1,6 @@
 ## Welcome to an0ne's blog
 
-This is me [Twitter](https://twitter.com/karthikbhata) 
+This is my [Twitter](https://twitter.com/karthikbhata) 
 
 #### I am a computer security enthusiast. 
 
