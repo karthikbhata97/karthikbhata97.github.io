@@ -24,7 +24,7 @@ def get_blog_dir() -> Path:
 
 
 BLOG_MD_DIR = get_blog_dir()
-TARGET_DIR = Path("./blog")
+TARGET_DIR = Path("./docs")
 
 print(f"Using blog dir at: ", str(BLOG_MD_DIR))
 
