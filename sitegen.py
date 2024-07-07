@@ -79,9 +79,17 @@ for d in TARGET_DIR.iterdir():
     # Generate posts subsection
     heading = f"### {d.name}\n"
     for file in d.iterdir():
-        if file.is_file() and file.suffix == ".html":
-            p = f"- [{file.with_suffix('').name}]({file.relative_to(TARGET_DIR)})\n"
-            heading += p
+        if not file.is_file():
+            continue
+
+        if file.suffix != ".html":
+            continue
+
+        if "(hidden)" in file.name:
+            continue
+
+        p = f"- [{file.with_suffix('').name}]({file.relative_to(TARGET_DIR)})\n"
+        heading += p
 
     heading += "\n\n"
     posts_section += heading
