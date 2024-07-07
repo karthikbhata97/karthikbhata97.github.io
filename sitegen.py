@@ -88,3 +88,6 @@ for d in TARGET_DIR.iterdir():
 
 home_md = BLOG_MD_DIR / "Home.md"
 gen_html(home_md, append=posts_section)
+
+home_html = TARGET_DIR / "Home.html"
+home_html.rename(TARGET_DIR / "index.html")
