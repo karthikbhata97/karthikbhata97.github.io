@@ -1,38 +1,60 @@
-<h1 id="early-detection-of-configuration-errors-to-reduce-failure-damage">Early Detection of Configuration Errors to Reduce Failure Damage</h1>
+<h1
+id="early-detection-of-configuration-errors-to-reduce-failure-damage">Early
+Detection of Configuration Errors to Reduce Failure Damage</h1>
 <blockquote>
-<p>Ref: <a href="https://www.usenix.org/system/files/conference/osdi16/osdi16-xu.pdf">Early Detection of Configuration Errors to Reduce Failure Damage</a></p>
+<p>Ref: <a
+href="https://www.usenix.org/system/files/conference/osdi16/osdi16-xu.pdf">Early
+Detection of Configuration Errors to Reduce Failure Damage</a></p>
 </blockquote>
 <ul>
-<li>Defines <code>Latent Configuration (LC) Errors</code> which are caused due to insufficient validations on the configuration, later until the configuration is actually used
+<li>Defines <code>Latent Configuration (LC) Errors</code> which are
+caused due to insufficient validations on the configuration, later until
+the configuration is actually used
 <ul>
-<li>There might be a large time between loading this configuration, generally in the initialization phase, to actually using it (thus latent).</li>
+<li>There might be a large time between loading this configuration,
+generally in the initialization phase, to actually using it (thus
+latent).</li>
 </ul></li>
-<li>When such configurations are related to reachability, availability or serviceability, LC errors can lead to downtime.</li>
+<li>When such configurations are related to reachability, availability
+or serviceability, LC errors can lead to downtime.</li>
 <li>Two main issues with such configs
 <ul>
 <li>The values are not checked at all. eg: check if file exists</li>
-<li>The values are not checked according to the usage. eg: value is used in open(config_value, WRITE)</li>
+<li>The values are not checked according to the usage. eg: value is used
+in open(config_value, WRITE)</li>
 </ul></li>
-<li>Paper implements a checker based on the static analysis and instrumentation</li>
+<li>Paper implements a checker based on the static analysis and
+instrumentation</li>
 <li>Static analysis:
 <ul>
-<li>Taint analysis to go from the configuration to the actual usage along the data flow path. Control flow is ignored in most cases to avoid over tainting</li>
-<li>Along with these instruction, the dependent values are also extracted. Eg: open(config_value, permission) &lt;- here permission is dependent value</li>
-<li>Any value that cannot be determined are skipped. Eg: a dependent value read from network</li>
+<li>Taint analysis to go from the configuration to the actual usage
+along the data flow path. Control flow is ignored in most cases to avoid
+over tainting</li>
+<li>Along with these instruction, the dependent values are also
+extracted. Eg: open(config_value, permission) &lt;- here permission is
+dependent value</li>
+<li>Any value that cannot be determined are skipped. Eg: a dependent
+value read from network</li>
 </ul></li>
 <li>Instrumentation:
 <ul>
-<li>Code is generated to perform same check as that in the actual usage, but in a &ldquo;sandboxed&rdquo; manner</li>
-<li>Here any side effect on the program is avoided. Eg: a local copy of global value is used instead of the actual global value.</li>
-<li>Utilities are written to check the actions performed by some library and system calls.</li>
+<li>Code is generated to perform same check as that in the actual usage,
+but in a &#x201C;sandboxed&#x201D; manner</li>
+<li>Here any side effect on the program is avoided. Eg: a local copy of
+global value is used instead of the actual global value.</li>
+<li>Utilities are written to check the actions performed by some library
+and system calls.</li>
 </ul></li>
-<li>This generated code is run right after the initialization phase of the program
+<li>This generated code is run right after the initialization phase of
+the program
 <ul>
 <li>Developer need to annotate two things
 <ul>
 <li>The interface of how configuration values are fetched</li>
-<li>The place where program moves from initialization state to execution</li>
+<li>The place where program moves from initialization state to
+execution</li>
 </ul></li>
 </ul></li>
-<li>TOCTOU issues are avoided by adding support to run these checkers regularly in a thread</li>
+<li>TOCTOU issues are avoided by adding support to run these checkers
+regularly in a thread</li>
 </ul>

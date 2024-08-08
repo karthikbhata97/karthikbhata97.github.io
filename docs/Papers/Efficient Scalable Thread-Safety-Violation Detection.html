@@ -1,0 +1,59 @@
+<h1 id="efficient-scalable-thread-safety-violation-detection">Efficient
+Scalable Thread-Safety-Violation Detection</h1>
+<blockquote>
+<p>Ref: <a
+href="https://dl.acm.org/doi/pdf/10.1145/3341301.3359638">Efficient
+Scalable Thread-Safety-Violation Detection</a></p>
+</blockquote>
+<ul>
+<li>Existing solutions
+<ul>
+<li>Static or dynamic analysis to identify the potential buggy locations
+to inject delays.
+<ul>
+<li>Injects small number of delays but large analysis time</li>
+</ul></li>
+<li>Inject probabilistic random delays
+<ul>
+<li>Inject large number of delays but small analysis time</li>
+</ul></li>
+<li>TSVD tries to find the middle ground</li>
+</ul></li>
+<li>TSVD employs two techniques to select the points to inject delays
+<ul>
+<li>Near miss tracking</li>
+<li>Happens before relationship identification</li>
+</ul></li>
+<li>Near miss tracking
+<ul>
+<li>Identify two operations on a thread-unsafe object, one of which is
+write and happens close to each other on different threads</li>
+<li>If the time difference falls within the threshold, mark it as
+dangerous pair</li>
+</ul></li>
+<li>Happens Before relationship identification
+<ul>
+<li>If adding a delay at location 1 delays the execution of the location
+2.</li>
+</ul></li>
+<li>Delay is injected on all such pairs
+<ul>
+<li>Delay is decayed if a pair does not trigger error</li>
+<li>Once the probability of delay drops to 0, the pair is removed from
+dangerous pair list</li>
+</ul></li>
+<li>Built to support .NET projects
+<ul>
+<li>Instrumentation and Runtime library</li>
+</ul></li>
+<li>Evaluation
+<ul>
+<li>Why some bugs were missed?
+<ul>
+<li>Two operations are close to each other only on some rare
+executions</li>
+<li>False positive happens before prediction</li>
+<li>Delay injection was not sufficient to capture the bugs</li>
+</ul></li>
+</ul></li>
+</ul>
