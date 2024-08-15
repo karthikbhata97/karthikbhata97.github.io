@@ -1,0 +1,46 @@
+<h1
+id="rx-treating-bugs-as-allergies-a-safe-method-to-survive-software-failures">Rx:
+Treating Bugs As Allergies&#x2014; A Safe Method to Survive Software
+Failures</h1>
+<blockquote>
+<p>Ref: <a href="https://dl.acm.org/doi/pdf/10.1145/1095810.1095833">Rx:
+Treating Bugs As Allergies&#x2014; A Safe Method to Survive Software
+Failures</a></p>
+</blockquote>
+<ul>
+<li>Software failure recovery to make the softwares more available</li>
+<li>Makes use of Checkpointing and Rollback to revert to an older
+state</li>
+<li>Then makes some <em>environmental changes</em> and continues the
+execution of the application.
+<ul>
+<li>If none of the changes work, it goes back one more checkpoint and
+retries</li>
+</ul></li>
+<li>Components
+<ul>
+<li>Proxy: Separates client and server interactions and helps in the
+saving and replay of requests upon re-execution.</li>
+<li>Sensors: Identifies when there is an error in the application using
+exceptions, interrupts etc.</li>
+<li>Checkpointing and Rollback
+<ul>
+<li>Based on: <a
+href="https://www.usenix.org/legacy/event/usenix04/tech/general/full_papers/srinivasan/srinivasan.pdf">Flashback</a></li>
+<li>Deletes oldest checkpoint based on stratergies.</li>
+</ul></li>
+<li>Environmental wrappers: For modifying environment during
+re-execution
+<ul>
+<li>Memory allocation wrappers: eg: zero fill, add padding</li>
+<li>Scheduling wrapper to change the unit of time for scheduling</li>
+<li>User request dropping</li>
+</ul></li>
+<li>Control unit: Coordinates with all the components
+<ul>
+<li>Also provides useful information for the programmer to diagnose and
+fix errors.</li>
+</ul></li>
+</ul></li>
+<li>Tested on Squid, Apache, CVS, MySQL</li>
+</ul>
