@@ -1,0 +1,175 @@
+<h2 id="kafl">kAFL</h2>
+<ul>
+<li>Feedback fuzzing of closed source kernel mode components</li>
+<li>Feedback using hardware capabilities
+<ul>
+<li>Intel PT
+<ul>
+<li>Q: What does it give?</li>
+</ul></li>
+</ul></li>
+<li>Challenges with kernel fuzzing
+<ul>
+<li>Lots of states</li>
+<li>Interrupts and threads</li>
+<li>No straightforward way to &#x201C;invoke&#x201D; the kernel</li>
+</ul></li>
+<li>Technical details
+<ul>
+<li>x86-64: Kernel and userspace is split into halves
+<ul>
+<li>Total virtual address space: 2^48
+<ul>
+<li>Why?</li>
+</ul></li>
+<li>Each get 2^47</li>
+<li>Switching from user to kernel on syscalls do not switch page
+table</li>
+</ul></li>
+</ul></li>
+<li>Intel Processor Trace
+<ul>
+<li>Three types
+<ul>
+<li>Taken-Not-Taken: For conditional jumps, tell if a branch is taken or
+not</li>
+<li>Target-IP: Indirect jumps, target IP</li>
+<li>Flow Update Packets: Interrupts and async events.</li>
+</ul></li>
+<li>Filters can be added to these
+<ul>
+<li>IP range</li>
+<li>Privilege level / ring</li>
+<li>CR3 filter: Only when the cr3 value matches. Helps in filtering per
+process</li>
+</ul></li>
+</ul></li>
+<li>System Design
+<ul>
+<li>Components
+<ul>
+<li>Host user space process: kAFL</li>
+<li>QEMU-PT + KVM-PT for getting the processor trace from guest</li>
+<li>Usermode agent in the target OS</li>
+</ul></li>
+<li>Setup:
+<ul>
+<li>Agent performs a hypercall to provide kernel panic handler</li>
+<li>Host patches this to get the feedback on crash
+<ul>
+<li>Instead of waiting for hte timeout</li>
+<li>Then CR3 is exchanged from agent to host
+<ul>
+<li>This is used to set the filter</li>
+</ul></li>
+<li>Then a shared memory address is exchanged where the agent expects
+the input for fuzzing</li>
+<li>Fuzzing loop starts</li>
+<li>While fuzzing is being performed, the QEMU-PT decodes the trace</li>
+<li>When the agent is done, it sends a hypercall (hc_finished).
+<ul>
+<li>On this VM-Exit, it stops tracing</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Fuzzing logic
+<ul>
+<li>This is the core and does similar to AFL</li>
+<li>Also runs fuzzing in parallel
+<ul>
+<li>Most fuzzing is not CPU bound, so this helps</li>
+</ul></li>
+</ul></li>
+<li>User mode agent
+<ul>
+<li>Broken into loader and agent</li>
+<li>Agent lets you run arbitrary program, thus making it easier</li>
+<li>Also loader checks if the program crashed and so it can restart</li>
+</ul></li>
+<li>KVM-PT
+<ul>
+<li>This helps in tracing virtual cpu instead of logical</li>
+<li>By enabling on vm-entry and disabling on vm-exit</li>
+</ul></li>
+<li>QEMU-PT
+<ul>
+<li>QEMU-PT also filters the stream of executed addresses&#x2014;based on
+previous knowledge of non-deterministic basic blocks&#x2014;to prevent
+false-positive fuzzing results, and makes those available to the fuzzing
+logic as AFL-compatible bitmaps</li>
+<li>???</li>
+</ul></li>
+<li>Also cache the disassembly results to speed up populating the
+bitmap</li>
+<li>Stateful and non deterministic
+<ul>
+<li>Interrupts generate non-deterministic exections</li>
+<li>So the fuzzer runs the program multiple times and identifies such
+basic blocks</li>
+<li>Adds it to blacklist</li>
+<li>This is ignored when updating the coverage map</li>
+</ul></li>
+<li>Hypercalls
+<ul>
+<li>Accessible from ring3</li>
+<li>So add custom hypercalls that can help in fuzzing
+<ul>
+<li>Eg: crash, ask for input</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>KVM-PT
+<ul>
+<li>vCPU specific traces
+<ul>
+<li>MSR autoload feature lets you load MSRs on exit or entry</li>
+</ul></li>
+<li>Continuous tracing
+<ul>
+<li>Uses ToPA
+<ul>
+<li>Table of physical address</li>
+<li>Each address is associated with behavior on overflow
+<ul>
+<li>First -&gt; interrupt</li>
+<li>Second -&gt; Stop tracing
+<ul>
+<li>But keep it large enough for this to never happen</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>On overflow it triggers and results in vm switch</li>
+<li>Buffer is cleared and switched back to the VM</li>
+</ul></li>
+</ul></li>
+<li>QEMU-PT
+<ul>
+<li>Userspace application to interact with KVM-PT</li>
+<li>When to start stop</li>
+<li>Also does the decoding the trace to generate a AFL map</li>
+<li>Our Intel PT software decoder acts like a just-in-time decoder,
+which means that code sections are only considered if they are executed
+according to the decoded trace data
+<ul>
+<li>???</li>
+</ul></li>
+</ul></li>
+<li>Discussion
+<ul>
+<li>OS specific code
+<ul>
+<li>Not a necessity but improves fuzzing (cr3 value, custom process to
+test kernel)</li>
+</ul></li>
+<li>Kernel JIT
+<ul>
+<li>Out of scope</li>
+<li>But very interesting</li>
+<li>Intel PT does not give all the instruction pointers and need the
+executable to decode
+<ul>
+<li>Becomes tricky</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
