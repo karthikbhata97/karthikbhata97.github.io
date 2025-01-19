@@ -1,0 +1,27 @@
+baseURL = 'https://karthikbhata97.github.io/'
+languageCode = 'en-us'
+title = "Karthik's Blog"
+theme = 'archie'
+
+[params]
+mode = 'auto'
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "About"
+url = "/about"
+weight = 2
+
+[[menu.main]]
+name = "Posts"
+url = "/posts"
+weight = 3
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 4
